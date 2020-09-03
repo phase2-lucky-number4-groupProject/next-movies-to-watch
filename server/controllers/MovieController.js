@@ -42,7 +42,7 @@ class MovieController {
                 sort_by: 'primary_release_date.desc',
                 include_adult: 'false',
                 include_video: 'true',
-                primary_release_year: '2000',
+                primary_release_year: '2020',
                 with_genres: `${idGen}`, 
                 page: '1'
 
