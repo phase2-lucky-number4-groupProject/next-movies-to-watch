@@ -10,7 +10,9 @@ app.use(cors())
 
 
 const router = require('./router')
+const errorHandler = require('./middlewares/errorHandler')
 app.use('/', router)
+app.use(errorHandler)
 
 
 app.listen(port, () => {
