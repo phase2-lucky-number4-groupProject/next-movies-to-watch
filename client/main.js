@@ -17,10 +17,19 @@ function register(event) {
         password: password
       }
     })
-      .done(res => {
-        auth()
-      })
-      .fail(err => {
+        .done(res => 
+        {
+            auth()
+        })
+        .fail(err => 
+        {
+            Swal.fire(
+            {
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Email or Password must be required!'
+            // footer: '<a href>Why do I have this issue?</a>'
+            })
         console.log(err.responseJSON.error)
       })
   }
@@ -50,6 +59,13 @@ function login(event)
             })
         .fail(err =>
             {
+                // alert('salah')
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Invalid Email or Password!',
+                    // footer: '<a href>Why do I have this issue?</a>'
+                  })
                 console.log(err.responseJSON, 'erroooooooooor ')
             })
         .always(() =>
@@ -81,11 +97,11 @@ function showLogin() {
     $('#login-page').show()
   }
   
-  function showRegister() {
+function showRegister() {
     event.preventDefault()
     $('#register-page').show()
     $('#login-page').hide()
-  }
+}
 
 function logout()
 {
