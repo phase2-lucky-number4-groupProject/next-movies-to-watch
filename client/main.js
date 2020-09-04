@@ -18,7 +18,7 @@ function register(event) {
       }
     })
       .done(res => {
-        checkAuth()
+        auth()
       })
       .fail(err => {
         console.log(err.responseJSON.error)
