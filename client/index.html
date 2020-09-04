@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-signin-client_id" content="659885854257-5os3uala7dk25e259l4babp8c6mneqcd.apps.googleusercontent.com">
+    <title>MOVIE</title>
+</head>
+<body>
+    <!-- LOGIN PAGE -->
+
+    <section id="login-page">
+        <form onsubmit="login(event)" action="index.html">
+        <table>
+            <tr>
+                <td><label>email</label></td>
+                <td><input type="text" name="email" id="login-email"></td>
+            </tr>
+            <tr>
+                <td><label>password</label></td>
+                <td><input type="password" name="email" id="login-password"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" class="btn" value="Sign in">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label>Didn't have an account yet?<a href="" onclick="showRegister()">Sign up here</a></label>
+                </td>
+            </tr>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </table>
+    </form>
+    </section>
+
+     <!-- REGISTER PAGE -->
+
+     <section id="register-page">
+        <form onsubmit="login(event)" action="index.html">
+        <table>
+            <tr>
+                <td><label>email</label></td>
+                <td><input type="text" name="email" id="register-email"></td>
+            </tr>
+            <tr>
+                <td><label>password</label></td>
+                <td><input type="password" name="email" id="register-password"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn" >Sign Up</button>
+                    <!-- <input type="submit" class="btn" value="Login"> -->
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <label>Have already account?<a href="" onclick="showLogin()">Sign in</a></label>
+                </td>
+            </tr>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </table>
+    </form>
+    </section>
+
+    <!-- HOME PAGE -->
+    <section id="home-page">
+        <form>
+            <button class="btn" onclick="logout()">logout</button>
+            <h1>WELCOME TO MOVIE APP</h1>
+        </form>
+    </section>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc=" crossorigin="anonymous"></script>
+	<script src="main.js"></script>
+</body>
+</html>

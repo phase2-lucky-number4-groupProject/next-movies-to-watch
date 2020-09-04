@@ -1,8 +1,9 @@
 const route = require('express').Router()
-const movieRoute = require('./movie')
-const userRoute = require('./user')
+const UserController = require('../controllers/UserController')
 
-route.use('/', userRoute)
-route.use('/movies', movieRoute)
+route.post('/', UserController.register)
+route.post('/users/register', UserController.register)
+route.post('/users/login', UserController.login)
+route.post('/users/googleSign', UserController.googleSign)
 
 module.exports = route
