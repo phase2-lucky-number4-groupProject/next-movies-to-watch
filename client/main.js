@@ -203,15 +203,18 @@ function auth(){
         $('#menuRegister').hide()
         $('#menuHome').show()
         $('#menuLogout').show()
+        
 
         //page
         $('#loginPage').hide()
-        $('#loginRegister').hide()
         fetchMovie(event)
         fetchQuote(event)
         $('#loungePage').show()
         $('#quotePage').show()
         $('#movieDetail').hide()
+        $('#search').show()
+        $('#weather').show()
+        $('#registerPage').hide()
         
         
     } else {
@@ -225,20 +228,13 @@ function auth(){
 
         // page
         $('#loginPage').show()
-        $('#loginRegister').show()
         $('#loungePage').hide()
         $('#quotePage').hide()
         $('#movieDetail').hide()
+        $('#search').hide()
+        $('#weather').hide()
+        $('#registerPage').hide()
     }
-}
-
-//=======//
-// Login //
-//=======//
-
-function logina(event){
-    event.preventDefault()
-    console.log('ok')
 }
 
 function searchMovie(event){
@@ -289,6 +285,17 @@ function fetchQuote(event){
     })
     .always(_ => {      
     })
+}
+
+//==========//
+// Register //
+//==========//
+
+function goToRegisterPage(event){
+    event.preventDefault()
+    $('#loginPage').hide()
+    $('#registerPage').show()
+    
 }
 
 //=============//
