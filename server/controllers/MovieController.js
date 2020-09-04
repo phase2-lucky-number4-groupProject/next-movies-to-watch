@@ -32,7 +32,7 @@ class MovieController {
                 idGen = 18
                 break;
             default:
-                throw {msg: 'not found'}
+                throw { msg: 'not found' }
                 break;
         }
         axios.get('https://api.themoviedb.org/3/discover/movie', {
@@ -43,7 +43,7 @@ class MovieController {
                 include_adult: 'false',
                 include_video: 'true',
                 primary_release_year: '2020',
-                with_genres: `${idGen}`, 
+                with_genres: `${idGen}`,
                 page: '1'
 
             }
@@ -60,17 +60,19 @@ class MovieController {
                 }
                 response.data.results.forEach(el => {
                     movieValue = {}
-                    movieValue.id = el.id
-                    movieValue.title = el.title
-                    movieValue.image = el.poster_path ? `https://image.tmdb.org/t/p/w500/${el.poster_path}` : 'https://free2music.com/template/img/none-img.png'
-                    movieValue.rating = el.popularity
-                    movieValue.description = el.overview ? el.overview : 'none'
-                    movieValue.genre = el.genre_ids[0]
+                    if (el.poster_path !== null) {
+                        movieValue.id = el.id
+                        movieValue.title = el.title
+                        movieValue.image = el.poster_path ? `https://image.tmdb.org/t/p/w500/${el.poster_path}` : `https://image.tmdb.org/t/p/w500/${el.poster_path}`
+                        movieValue.rating = el.popularity
+                        movieValue.description = el.overview ? el.overview : 'none'
+                        movieValue.genre = el.genre_ids[0]
 
-                    movieList.push(movieValue)
+                        movieList.push(movieValue)
+                    }
 
                 });
-                res.status(200).json({movieList})
+                res.status(200).json({ movieList })
             })
             .catch(function (error) {
                 res.status(500).json({ error })
@@ -79,7 +81,7 @@ class MovieController {
 
 
 
-    static searchMovies(req,res){
+    static searchMovies(req, res) {
         movieList = []
         let { genre } = req.body
 
@@ -108,7 +110,7 @@ class MovieController {
                 idGen = 18
                 break;
             default:
-                throw {msg: 'not found'}
+                throw { msg: 'not found' }
                 break;
         }
 
@@ -136,17 +138,19 @@ class MovieController {
                 }
                 response.data.results.forEach(el => {
                     movieValue = {}
-                    movieValue.id = el.id
-                    movieValue.title = el.title
-                    movieValue.image = el.poster_path ? `https://image.tmdb.org/t/p/w500/${el.poster_path}` : 'https://free2music.com/template/img/none-img.png'
-                    movieValue.rating = el.popularity
-                    movieValue.description = el.overview ? el.overview : 'none'
-                    movieValue.genre = el.genre_ids[0]
+                    if (el.poster_path !== null) {
+                        movieValue.id = el.id
+                        movieValue.title = el.title
+                        movieValue.image = el.poster_path ? `https://image.tmdb.org/t/p/w500/${el.poster_path}` : `https://image.tmdb.org/t/p/w500/${el.poster_path}`
+                        movieValue.rating = el.popularity
+                        movieValue.description = el.overview ? el.overview : 'none'
+                        movieValue.genre = el.genre_ids[0]
 
-                    movieList.push(movieValue)
+                        movieList.push(movieValue)
+                    }
 
                 });
-                res.status(200).json({movieList})
+                res.status(200).json({ movieList })
             })
             .catch(function (error) {
                 res.status(500).json({ error })
