@@ -1,155 +1,8 @@
-<<<<<<< HEAD
-let baseUrl = 'http://localhost:3000';
-$( document ).ready(function() 
-{
-    auth();
-});
-
-function register(event) {
-    event.preventDefault()
-    let email = $('#register-email').val()
-    let password = $('#register-password').val()
-  
-    $.ajax({
-      url: `${baseUrl}/users/register`,
-      method: 'post',
-      data: {
-        email: email,
-        password: password
-      }
-    })
-      .done(res => {
-        auth()
-      })
-      .fail(err => {
-        console.log(err.responseJSON.error)
-      })
-  }
-
-function login(event)
-{
-        event.preventDefault();
-        // alert('disubmit')
-        let email = $('#login-email').val();
-        let password = $('#login-password').val();
-        // console.log(email, password)
-        $.ajax(
-        {
-            url:`${baseUrl}/users/login`,
-            method: 'post',
-            data:
-            {
-                email,
-                password
-            }
-        })
-        .done(data => 
-            {
-                // console.log(data, 'dataaaaaaaaa')
-                localStorage.setItem('token', data.token)
-                auth();
-            })
-        .fail(err =>
-            {
-                console.log(err.responseJSON, 'erroooooooooor ')
-            })
-        .always(() =>
-        {
-            $('#login-email').val('');
-            $('#login-password').val('');
-        })
-}
-
-function auth()
-{
-    if(localStorage.token)
-    {
-        $('#login-page').hide();
-        $('#home-page').show()
-        $('#register-page').hide();
-    }
-    else
-    {
-        $('#login-page').show();
-        $('#home-page').hide()
-        $('#register-page').hide();
-    }
-}
-
-function showLogin() {
-    event.preventDefault()
-    $('#register-page').hide()
-    $('#login-page').show()
-  }
-  
-  function showRegister() {
-    event.preventDefault()
-    $('#register-page').show()
-    $('#login-page').hide()
-  }
-
-function logout()
-{
-    localStorage.clear()
-    let auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-    console.log('User signed out.');
-    });
-    auth(); 
-    // event.preventDefault();
-}
-
-function fetchTodos()
-{
-    $.ajax(
-    {
-        url: `${baseUrl}/todos`,
-        method:'get',
-        headers:
-        {
-            token: data.localStorage.token
-        }
-    })
-    .done(data =>
-        {
-            data.t
-        })
-}
-
-function onSignIn(googleUser) {
-    // var profile = googleUser.getBasicProfile();
-    // console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-    // console.log('Name: ' + profile.getName());
-    // console.log('Image URL: ' + profile.getImageUrl());
-    // console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-    let id_token = googleUser.getAuthResponse().id_token;
-    console.log(id_token, '<<<<<<<<<<<<<<<<<IDTOKEN')
-    $.ajax(
-    {
-        url:`${baseUrl}/users/googleSign`,
-        method: `post`,
-        data: {
-            id_token
-        }
-    })
-        .done(data =>
-            {
-                // console.log(data, '<<<<<<<<DATAAA');
-                localStorage.setItem('token', data.token)
-                auth()
-            })
-        .fail(err =>
-            {
-                console.log(err.responseJSON, '<<<<<<<<ERRORRRR')
-            })
-  }
-=======
 let defaultUrl = 'http://localhost:3000';
 let tampungMovie = [];
 
 $(document).ready(function(){
     auth()
-    CekWeather()
 })
 
 
@@ -209,6 +62,7 @@ function auth(){
         $('#loginPage').hide()
         fetchMovie(event)
         fetchQuote(event)
+        CekWeather()
         $('#loungePage').show()
         $('#quotePage').show()
         $('#movieDetail').hide()
@@ -237,30 +91,6 @@ function auth(){
     }
 }
 
-function searchMovie(event){
-    event.preventDefault()
-    let  searchGenre = $('#searchGenre').val()
-    $.ajax({
-        url: `${defaultUrl}/movies/${searchGenre}`,
-        method: 'get'
-    })
-    .done(data => {
-        // console.table(data[0].title)
-         $('#waterwheelCarousel').empty()
-        //  console.log(data.movieList[0].title)
-        data.movieList.forEach(each => {
-             console.log(each.title)
-            //console.log(`<img src="${each.image}" title="${each.title}" />`)
-            $('#waterwheelCarousel').append(`<a href="apa.html"><img src="${each.image}" width=200px title="${each.title}\nRate: ${each.rating}" /></a>`)
-        })
-        Carousel()     
-    })
-    .fail(err => {
-        swal(err.responseJSON.error.join())
-    })
-    .always(_ => {      
-    })
-}
 
 //=======//
 // Quote //
@@ -270,7 +100,10 @@ function fetchQuote(event){
     event.preventDefault()
     $.ajax({
         url: `${defaultUrl}/quote`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            token: localStorage.token
+        }
     })
     .done(data => {
         // console.log(data.quotes.id)
@@ -281,7 +114,7 @@ function fetchQuote(event){
          <p class="readmore">${data.quotes.author}</p>`)
     })
     .fail(err => {
-        swal(err.responseJSON.error.join())
+        swal(err.responseJSON.errors.join())
     })
     .always(_ => {      
     })
@@ -298,6 +131,34 @@ function goToRegisterPage(event){
     
 }
 
+function register(event){
+    console.log('dari register client')
+    event.preventDefault()
+    
+    let email = $('#regEmail').val()
+    let password = $('#regPassword').val()
+    $.ajax({
+            url: `${defaultUrl}/users/register`,
+            method: 'post',
+            data: {
+                email,
+                password
+            }
+        })
+        .done(data => {
+            swal('Register Sukses, Please Login')
+            auth()
+        })
+        .fail(err => {
+            swal(err.responseJSON.join())
+        })
+        .always(_ => {
+            $('#email').val('')
+            $('#password').val('')        
+        })
+    
+}
+
 //=============//
 // Fetch Movie //
 //============//
@@ -306,12 +167,16 @@ function fetchMovie(event){
     event.preventDefault()
     $.ajax({
         url: `${defaultUrl}/movies/action`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            token: localStorage.token
+        }
     })
     .done(data => {
         // console.table(data[0].title)
          $('#waterwheelCarousel').empty()
         let i = 0;
+        tampungMovie = [];
         data.movieList.forEach(each => {
             tampungMovie.push(each) 
             $('#waterwheelCarousel').append(`<a href="#" onclick="movieDetail(${i})"><img src="${each.image}" width=200px title="${each.title}\nRate: ${each.rating}" /></a>`)
@@ -320,7 +185,7 @@ function fetchMovie(event){
         Carousel()     
     })
     .fail(err => {
-        swal(err.responseJSON.error.join())
+        swal(err.responseJSON.errors.join())
     })
     .always(_ => {      
     })
@@ -349,6 +214,43 @@ function movieDetail(id){
     
 }
 
+function searchMovie(event){
+    event.preventDefault()
+    let  searchGenre = $('#searchGenre').val()
+    console.log(searchGenre)
+    $.ajax({
+        url: `${defaultUrl}/movies/${searchGenre}`,
+        method: 'get',
+        headers: {
+            token: localStorage.token
+        }
+    })
+    .done(data => {
+        // console.table(data[0].title)
+         $('#waterwheelCarousel').empty()
+        //  console.log(data.movieList[0].title)
+        let i = 0;
+        tampungMovie = [];
+        data.movieList.forEach(each => {
+            tampungMovie.push(each) 
+            console.log(each.title)
+            $('#waterwheelCarousel').append(`<a href="#" onclick="movieDetail(${i})"><img src="${each.image}" width=200px title="${each.title}\nRate: ${each.rating}" /></a>`)
+            i++;
+         })
+        Carousel()  
+        $('#movieDetail').hide()
+        $('#loungePage').show()
+        $('#quotePage').show()
+        // auth()   
+    })
+    .fail(err => {
+        
+        swal(err.responseJSON.errors.join())
+    })
+    .always(_ => {  
+        $('#searchGenre').val('')
+    })
+}
 //=======//
 // login //
 //=======//
@@ -358,55 +260,58 @@ function login(event){
     
     
     event.preventDefault()
-        localStorage.setItem('token', 'faketoken')
-        localStorage.setItem('email', $('#email').val())
+        // localStorage.setItem('token', 'faketoken')
+        // localStorage.setItem('email', $('#email').val())
+        // auth()
+        
+    // CekWeather()
+    console.log('ini dr login client')
+    let email = $('#email').val()
+    let password = $('#password').val()
+    $.ajax({
+        url: `${defaultUrl}/users/login`,
+        method: 'post',
+        data: {
+            email,
+            password
+        }
+    })
+    .done(data => {
+        console.log(data, '<<<<<<<<<< ini data')
+        localStorage.setItem('token', data.token)
+        // CekWeather()
         auth()
-    // console.log('iniiiii dataaaa login')
-    // event.preventDefault()
-    // let email = $('#email').val()
-    // let password = $('#password').val()
-    // $.ajax({
-    //     url: `${defaultUrl}/users/login`,
-    //     method: 'post',
-    //     data: {
-    //         email,
-    //         password
-    //     }
-    // })
-    // .done(data => {
-    //     console.log(data, '<<<<<<<<<< ini data')
-    //     localStorage.setItem('token', data.token)
-    //     localStorage.setItem('email', data.email)
-    //     // CekWeather()
-    //     auth()
-    // })
-    // .fail(err => {
-    //     // console.log(err.responseJSON, '<<<<<<<<<<< ini error login')
-    //     // let tampung = JSON.parse(err.responseText)
-    //     // console.table(err.responseJSON.error.join())
-    //     // alert(err)
-    //     swal(err.responseJSON.error.join())
-    // })
-    // .always(_ => {
-    //     $('#email').val('')
-    //     $('#password').val('')        
-    // })
+    })
+    .fail(err => {
+        // console.log(err.responseJSON, '<<<<<<<<<<< ini error login')
+        // let tampung = JSON.parse(err.responseText)
+        // console.table(err.responseJSON.error.join())
+        // console.log(err.responseJSON)
+        swal(err.responseJSON.errors.join())
+    })
+    .always(_ => {
+        $('#email').val('')
+        $('#password').val('')        
+    })
 }
 
 //==========//
-// kWeather //
+// Weather //
 //==========//
 
 
 function CekWeather(){ 
-    // console.log('masukkk cek weather')
+    console.log('masukkk cek weather')
     $.ajax({
         
         url: `${defaultUrl}/weather`,
-        method: 'get'
+        method: 'get',
+        headers: {
+            token: localStorage.token
+        }
     })
     .done(data => {
-        // console.log(data, 'inii dataaaa weather')
+        console.log(data, 'inii dataaaa weather')
         // console.table(data.weather[0].main)
         let city = data.weather.name
         let weather = data.weather.weather[0].main
@@ -414,14 +319,14 @@ function CekWeather(){
         let pressure =  data.weather.main.pressure
         let humidity =  data.weather.main.humidity
         let kWeatherString = `current weather of ${city} is ${weather} with temperature : ${temp} °C, pressure : ${pressure}, humidity : ${humidity} ` 
-        // console.table(data.weathername)
+        console.log(kWeatherString)
         
-    $('#Weather').empty()
-    $('#Weather').append(kWeatherString)
+    $('#weather').empty()
+    $('#weather').append(kWeatherString)
     })
     .fail(err => {
-        // console.log(err.responseJSON, '<<<<<<<<<<<<<<<<<<< ini error weather')
-        swal(err.responseJSON.error.join('\n'))
+        console.log(err.responseJSON, '<<<<<<<<<<<<<<<<<<< ini error weather')
+        // swal(err.responseJSON.error.join('\n'))
     })
 
 }
@@ -433,10 +338,35 @@ function CekWeather(){
 function logout(event){
     event.preventDefault()
     localStorage.clear()
-    //let auth2 = gapi.auth2.getAuthInstance();
-    //auth2.signOut().then(function () {
-    //   console.log('User signed out.');
-    //});
+    let auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
     auth()
 }
->>>>>>> 3bdb690b896b1b93f0e758316f67524e08be07bd
+
+//======================//
+// Google Profile Info //
+//====================//
+
+function onSignIn(googleUser) {
+    let googleTokenId = googleUser.getAuthResponse().id_token;
+    // console.log(googleTokenId, '<<<<<<<< ini id token gugel')
+    $.ajax({
+        url: `${defaultUrl}/users/googleSign`,
+        method: 'post',
+        data: {
+            id_token: googleTokenId
+        }
+    })
+    .done(data => {
+        console.log(data, '<<<<<< data google')
+        localStorage.setItem('token', data.token)
+        localStorage.setItem('email', data.email)
+        auth()
+    })
+    .fail(err => {
+        // console.log(err.responseJSON, '<<<<<<<<<<<<<<<<<<< ini error onSign google')
+        swal(err.responseJSON.errors.join('\n'))
+    })
+  }

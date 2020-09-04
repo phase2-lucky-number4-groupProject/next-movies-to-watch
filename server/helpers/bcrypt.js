@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 
 function hashPass(password)
 {
+    console.log('dari bycrypt')
     var salt = bcrypt.genSaltSync(10);
     return bcrypt.hashSync(password, salt);
 }

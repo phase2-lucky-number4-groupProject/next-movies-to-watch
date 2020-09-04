@@ -7,6 +7,7 @@ class UserController
 {
     static register(req, res, next)
     {
+        console.log('oookkkkkkkkkk')
         let { email, password } = req.body;
         User.create(
         {
@@ -31,6 +32,7 @@ class UserController
 
     static login(req, res, next)
     {
+        console.log('ini login server')
         let { email, password } = req.body;
         User.findOne(
         {
