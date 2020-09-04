@@ -14,12 +14,12 @@ function errHandler(err, req, res, next)
     }
     else if(err.name === 'JsonWebTokenError')
     {
-        errors.push('kamu belum terauthorisasi')
+        errors.push('you are not authorized')
         statusCode = 401;
     }
     else if(err.name === 'SequelizeUniqueConstraintError')
     {
-        errors.push('Email sudah pernah terdaftar')
+        errors.push('Email has been already registered')
         statusCode = 500;
     }
     else
