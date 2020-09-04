@@ -1,8 +1,9 @@
 let defaultUrl = 'http://localhost:3000';
+let tampungMovie = [];
 
 $(document).ready(function(){
     auth()
-    CekWeather() 
+    CekWeather()
 })
 
 
@@ -48,6 +49,7 @@ function Carousel(){
 }
 
 function auth(){
+    event.preventDefault()
     if(localStorage.token){
         //sudah login
         //menu
@@ -60,9 +62,10 @@ function auth(){
         $('#loginPage').hide()
         $('#loginRegister').hide()
         fetchMovie(event)
+        fetchQuote(event)
         $('#loungePage').show()
-        
         $('#quotePage').show()
+        $('#movieDetail').hide()
         
         
     } else {
@@ -79,6 +82,7 @@ function auth(){
         $('#loginRegister').show()
         $('#loungePage').hide()
         $('#quotePage').hide()
+        $('#movieDetail').hide()
     }
 }
 
@@ -105,7 +109,7 @@ function searchMovie(event){
         data.movieList.forEach(each => {
              console.log(each.title)
             //console.log(`<img src="${each.image}" title="${each.title}" />`)
-          $('#waterwheelCarousel').append(`<img src="${each.image}" width=200px title="${each.title}" />`)
+            $('#waterwheelCarousel').append(`<a href="apa.html"><img src="${each.image}" width=200px title="${each.title}\nRate: ${each.rating}" /></a>`)
         })
         Carousel()     
     })
@@ -116,6 +120,35 @@ function searchMovie(event){
     })
 }
 
+//=======//
+// Quote //
+//=======//
+
+function fetchQuote(event){
+    event.preventDefault()
+    $.ajax({
+        url: `${defaultUrl}/quote`,
+        method: 'get'
+    })
+    .done(data => {
+        // console.log(data.quotes.id)
+         $('#divQuote').empty()
+         $('#divQuote').append(`
+         <h2>Today's Quote</h2>
+         <p>${data.quotes.quote}</p>
+         <p class="readmore">${data.quotes.author}</p>`)
+    })
+    .fail(err => {
+        swal(err.responseJSON.error.join())
+    })
+    .always(_ => {      
+    })
+}
+
+//=============//
+// Fetch Movie //
+//============//
+
 function fetchMovie(event){
     event.preventDefault()
     $.ajax({
@@ -125,11 +158,11 @@ function fetchMovie(event){
     .done(data => {
         // console.table(data[0].title)
          $('#waterwheelCarousel').empty()
-        //  console.log(data.movieList[0].title)
+        let i = 0;
         data.movieList.forEach(each => {
-             console.log(each.title)
-            //console.log(`<img src="${each.image}" title="${each.title}" />`)
-          $('#waterwheelCarousel').append(`<img src="${each.image}" width=200px title="${each.title}" />`)
+            tampungMovie.push(each) 
+            $('#waterwheelCarousel').append(`<a href="#" onclick="movieDetail(${i})"><img src="${each.image}" width=200px title="${each.title}\nRate: ${each.rating}" /></a>`)
+            i++;
         })
         Carousel()     
     })
@@ -139,6 +172,33 @@ function fetchMovie(event){
     .always(_ => {      
     })
 }
+
+function movieDetail(id){
+    event.preventDefault()
+    $('#loungePage').hide()
+    $('#quotePage').hide()
+    $('#movieDetail').show()
+    console.log(tampungMovie[id])
+    $('#movieDetail').empty()
+    $('#movieDetail').append(`
+        <div id="featured_intro">
+            <div class="fr_left">
+             <h2>${tampungMovie[id].title}</h2>
+             <p><img class="imgl" src="${tampungMovie[id].image}" alt="" width="250" />
+             Rating: ${tampungMovie[id].rating}
+             <h3>${tampungMovie[id].description}</h3>
+             </p>
+            </div>
+        <br class="clear" />
+        </div>
+  `)
+
+    
+}
+
+//=======//
+// login //
+//=======//
 
 
 function login(event){
@@ -189,17 +249,17 @@ function CekWeather(){
     // console.log('masukkk cek weather')
     $.ajax({
         
-        url: `http://api.openweathermap.org/data/2.5/weather?q=Jakarta&appid=733d409fb13b69cd6c672636fce838ba`,
+        url: `${defaultUrl}/weather`,
         method: 'get'
     })
     .done(data => {
         // console.log(data, 'inii dataaaa weather')
-        console.table(data.weather[0].main)
-        let city = data.name
-        let weather = data.weather[0].main
-        let temp =  Math.round((Number(data.main.temp)-273.15) * 10) / 10
-        let pressure =  data.main.pressure
-        let humidity =  data.main.humidity
+        // console.table(data.weather[0].main)
+        let city = data.weather.name
+        let weather = data.weather.weather[0].main
+        let temp =  Math.round((Number(data.weather.main.temp)-273.15) * 10) / 10
+        let pressure =  data.weather.main.pressure
+        let humidity =  data.weather.main.humidity
         let kWeatherString = `current weather of ${city} is ${weather} with temperature : ${temp} °C, pressure : ${pressure}, humidity : ${humidity} ` 
         // console.table(data.weathername)
         

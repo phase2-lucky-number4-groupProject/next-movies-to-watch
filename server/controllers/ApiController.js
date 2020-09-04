@@ -20,8 +20,9 @@ class ApiController {
                 staging.author = responseQuotes[i].quoteAuthor
                 sortedQuotes.push(staging);
             }
+            let random = Math.floor(Math.random() * 20)
             // console.log(sortedQuotes);
-            res.status(200).json({quotes: sortedQuotes});
+            res.status(200).json({quotes: sortedQuotes[random]});
         } catch (error) {
             next(error)
         }
