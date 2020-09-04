@@ -58,6 +58,7 @@ div.wrapper h1, div.wrapper h2, div.wrapper h3, div.wrapper h4, div.wrapper h5, 
 #header{padding:2px 0 20px 0;}
 #header .fl_left{display:block; float:left; margin-top:17px; overflow:hidden;}
 #header .fl_right{display:block; float:right; width:468px; height:60px; margin-top:21px; overflow:hidden;}
+#header .fr_left{display:block; float:left; margin-top:17px; overflow:hidden;}
 #header h1, #header p, #header ul{margin:0; padding:0; list-style:none; line-height:normal;}
 #header h1 a{font-size:36px; color:#E60498; background-color:#000000;}
 #header .fl_left p{margin-top:5px;}
@@ -79,6 +80,8 @@ div.wrapper h1, div.wrapper h2, div.wrapper h3, div.wrapper h4, div.wrapper h5, 
 #featured_intro{padding:0 0 20px 0;}
 #featured_intro .fl_left{display:block; float:left; width:470px;}
 #featured_intro .fl_left h2{margin:0; padding:0; font-size:120px; color:#585858; background-color:#151515; text-transform:uppercase; line-height:normal;}
+#featured_intro .fr_left h2{margin:0; padding:0; font-size:75px; color:#585858; background-color:#151515; text-transform:uppercase; line-height:normal;}
+
 #featured_intro .fl_right{display:block; float:right; width:450px; padding-top:65px; text-align:justify; line-height:1.5em;}
 #featured_intro .fl_right .readmore{display:block; text-align:right; font-weight:bold;}
 
