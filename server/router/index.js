@@ -5,7 +5,7 @@ const movieRoute = require('./movie')
 const apiRoute = require('./api')
 const weatherRoute = require('./weather')
 
-route.post('/', UserController.register)
+
 route.post('/users/register', UserController.register)
 route.post('/users/login', UserController.login)
 route.post('/users/googleSign', UserController.googleSign)
