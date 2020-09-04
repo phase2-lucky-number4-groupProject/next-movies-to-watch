@@ -1,6 +1,4 @@
 function errorHandler(err, req, res, next) {
-    console.log(err, '<<< from errorHandler')
-
     let errors = []
     let statusCode = 500
 
